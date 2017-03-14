@@ -1,0 +1,4 @@
+  oauth.consumerKey=HNRjCyacLDdlZhyplxj2NWYAa
+  oauth.consumerSecret=oozNoCph3vWJ8bXdvJEMKSCuBPGBDjVPdW2nisZ9L6HcKTN3GP
+  oauth.accessToken=839143326020419584-0f80zXFLeRbcJiSEkhOd4Uw9Pnv15lt
+  oauth.accessTokenSecret=OLK5qEXnG6UJVjixTJc2WtoupFhNIj4r6nPzWKdlt6d3i
