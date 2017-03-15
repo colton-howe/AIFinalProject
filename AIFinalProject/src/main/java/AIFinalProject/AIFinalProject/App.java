@@ -1,5 +1,6 @@
 package AIFinalProject.AIFinalProject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import twitter4j.*;
@@ -38,7 +39,7 @@ public class App {
       // Main menu
       Scanner input = new Scanner(System.in);
       System.out.print("\n--------------------"
-          + "\nH. Home Timeline\nS. Search"
+          + "\nH. Home Timeline\nS. Search\nU. User Search"
           + "\n--------------------"
           + "\nA. Get Access Token\nQ. Quit"
           + "\n--------------------\n> ");
@@ -80,6 +81,34 @@ public class App {
                 + status.getText());
           }
 
+        }
+        
+        else if (choice.equalsIgnoreCase("U")) {
+        	
+        	// Ask the user for a search string.
+            System.out.print("\nSearch for user: ");
+            String searchStr = input.nextLine();
+            
+            List<Status> tweets = new ArrayList();
+            int pageNumber = 1;
+            while(true){
+            	try {
+    	        	int size = tweets.size(); 
+    	        	Paging page = new Paging(pageNumber++, 100);
+    	        	tweets.addAll(twitter.getUserTimeline(searchStr, page));
+    	        	if (tweets.size() == size)
+    	        		break;
+            	} catch(TwitterException e) {
+            		e.printStackTrace();
+            	}
+            }
+        	Paging numOfTweets = new Paging(1,1);
+        	List<Status> posts = twitter.getUserTimeline(searchStr, numOfTweets);
+        	System.out.println("\nHere are all the posts by @" 
+        	+ posts.get(0).getUser().getName() + ":");
+        	for (Status status : tweets) {
+                System.out.println(status.getText());
+            }
         }
         
         // Get Access Token
