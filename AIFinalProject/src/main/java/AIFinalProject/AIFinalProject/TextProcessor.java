@@ -61,7 +61,7 @@ public class TextProcessor {
 	public int filterByFrequency(double threshold, HashMap<String, Integer> wordOccurrences){
 		int countRemoved = 0;
 		List<String> toBeRemoved = new ArrayList<String>();
-		doublealcca totalWords = 0;
+		double totalWords = 0;
 		
 		// Get a set of the keys and an iterator for the hashmap
 		Set<String> keySet = wordOccurrences.keySet();
