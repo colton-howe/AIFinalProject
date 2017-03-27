@@ -1,3 +1,4 @@
 # AI Final Project
-By: Colton Howe (100520095)
-By: Murtja Alkhabbaz (100478903)
+- Colton Howe (100520095)
+- Murtja Alkhabbaz (100478903)
+- Timothy MacDougall (100493250)
