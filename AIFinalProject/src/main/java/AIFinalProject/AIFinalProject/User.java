@@ -2,19 +2,19 @@ package AIFinalProject.AIFinalProject;
 
 import java.util.List;
 
-public class User {
+import twitter4j.Status;
+
+public class Customer {
 	
 	String username;
-	List<String> tweets;
-	int age;
+	List<Status> tweets;
 	
-	public User(String username, List<String> tweets, int age){
+	public Customer(String username, List<Status> tweets){
 		this.username = username;
 		this.tweets = tweets;
-		this.age = age;
 	}
 	
-	public List<String> getTweets(){
+	public List<Status> getTweets(){
 		return this.tweets;
 	}
 

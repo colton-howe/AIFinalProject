@@ -1,21 +1,36 @@
 package AIFinalProject.AIFinalProject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
+
+import twitter4j.Paging;
+import twitter4j.Query;
+import twitter4j.QueryResult;
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.User;
+import twitter4j.auth.AccessToken;
+import twitter4j.auth.RequestToken;
+import twitter4j.conf.ConfigurationBuilder;
 
 public class TwitterAgent {
 	
-	private HashMap<String, User> users;
+	Twitter twitter;
+	private HashMap<String, Customer> users;
 	
 	public TwitterAgent(){
 		
-		users = new HashMap<String, User>();
+		users = new HashMap<String, Customer>();
 		
 	}
 	
-	public boolean isCustomer(User user){
+	public boolean isCustomer(Customer user){
 		
 		if(!users.containsKey(user.getUsername())){
 			return false;
@@ -35,7 +50,7 @@ public class TwitterAgent {
 	}
 	
 	// Functions that determine if someone is a customer or not
-	public boolean ifProductFrequency(User user){
+	public boolean ifProductFrequency(Customer user){
 		double threshold = 0.2;
 		boolean result = false;
 		
@@ -47,37 +62,41 @@ public class TwitterAgent {
 		return result;
 	}
 	
-	public void addTrainingData(HashMap<String, User> newUsersData){
-		// merge data into this.users hashmap
-		
+	public void createTrainingData() throws TwitterException{
+		// Create a Query object.
+        Query query = new Query("@Microsoft");
+
+        // Send API request to execute a search with the given query.
+        QueryResult result = twitter.search(query);
+
+        // Display search results.
+        HashMap<String, Customer> possibleCustomers = new HashMap<String, Customer>();
+        for (Status status : result.getTweets()) {
+      	  //If the user is not in the hashmap, put it in there
+      	  if(!possibleCustomers.containsKey(status.getUser().getScreenName())){
+      		  List<Status> tweets = new ArrayList();
+                int pageNumber = 1;
+                while(true){
+                	try {
+        	        	int size = tweets.size(); 
+        	        	Paging page = new Paging(pageNumber++, 100);
+        	        	tweets.addAll(twitter.getUserTimeline(status.getUser().getScreenName(), page));
+        	        	if (tweets.size() == size)
+        	        		break;
+                	} catch(TwitterException e) {
+                		e.printStackTrace();
+                	}
+                }
+      		  Customer newPossibleCust = new Customer(status.getUser().getScreenName(),tweets);
+      	  }
+        }
 	}
 	
 	public Set<String> getUsers(){
 		return users.keySet();
 	}
 	
-	public User getUser(String key){
+	public Customer getUser(String key){
 		return users.get(key);
 	}
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		TwitterAgent ta = new TwitterAgent();
-		
-		HashMap<String, User> data = new HashMap<String, User>();
-		
-		List<String> userATweets = Arrays.asList("I love my surface pro!", "I am going on vacation", "linux is also good");
-		User joe = new User("@joe", userATweets, 25);
-		
-		List<String> userBTweets = Arrays.asList("Testing out office", "i love my office pro", "office 360 is good for programmers");
-		User kevin = new User("@kevin", userBTweets, 17);
-		
-		data.put(joe.getUsername(), joe);
-		data.put(kevin.getUsername(), kevin);
-		
-		ta.addTrainingData(data);
-		
-		
-	}
-
 }
